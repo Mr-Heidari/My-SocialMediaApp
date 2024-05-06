@@ -28,6 +28,7 @@ const SinginForm = () => {
   //this work like pop up message 
   const { toast } = useToast();
 
+   //check if user is on our database
   const { checkAuthUser, isLoading: isUserLoading } = useUserContext();
 
   const navigate = useNavigate();
