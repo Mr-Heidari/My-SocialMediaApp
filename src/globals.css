@@ -189,7 +189,7 @@
 
   /* Bottom bar */
   .bottom-bar {
-    @apply z-50 flex-between w-full sticky bottom-0 rounded-t-[20px] bg-dark-2 px-5 py-4 md:hidden;
+    @apply z-50 flex-between w-full sticky bottom-0 rounded-t-[20px] bg-neutral-700 px-5 py-3 md:hidden;
   }
 
   /* File uploader */
@@ -220,7 +220,7 @@
 
   /* Left sidebar */
   .leftsidebar {
-    @apply hidden md:flex px-6 py-10 flex-col justify-between min-w-[270px] bg-dark-2;
+    @apply md:h-fit md:min-h-screen hidden md:flex px-6 py-10 flex-col justify-between min-w-[270px] bg-neutral-700;
   }
 
   .leftsidebar-link {
@@ -238,7 +238,7 @@
 
   /* Topbar */
   .topbar {
-    @apply sticky top-0 z-50 md:hidden bg-dark-2 w-full;
+    @apply sticky top-0 z-50 md:hidden bg-neutral-700 w-full;
   }
 
   /* User card */
@@ -276,6 +276,6 @@
   }
 
   .shad-button_ghost {
-    @apply flex gap-4 items-center justify-start hover:bg-transparent hover:text-white !important;
+    @apply  flex gap-4 items-center justify-start hover:bg-transparent hover:text-white !important;
   }
 }

@@ -1,3 +1,4 @@
+import Buttombar from '@/components/ui/shared/Buttombar'
 import LeftSidebar from '@/components/ui/shared/LeftSidebar'
 import Topbar from '@/components/ui/shared/Topbar'
 
@@ -13,6 +14,8 @@ const RootLayout = () => {
       <section className='flex flex-1 h-full'>
         <Outlet/>
       </section>
+      
+      <Buttombar/>
     </div>
   )
 }
