@@ -1,7 +1,13 @@
-const Loader = () => {
+type props = {
+  width:number,
+  height:number
+}
+
+
+const Loader = ({width , height}: props) => {
   return (
     <div>
-        <img src="/assets/icons/loader.svg" alt="loader" width={20} height={20}/>
+        <img src="/assets/icons/Spinner-2.gif" alt="loader" width={width} height={height} className="object-contain"/>
     </div>
   )
 }

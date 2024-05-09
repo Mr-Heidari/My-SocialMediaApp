@@ -176,7 +176,7 @@ const SingupForm = () => {
             <Button type="submit" className="shad-button_primary mt-5">
               {isCreatingAccount ? (
                 <>
-                  <Loader /> Loading...
+                  <Loader width={18} height={18}/> Loading...
                 </>
               ) : (
                 "Sign up"

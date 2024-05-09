@@ -123,7 +123,7 @@ const SinginForm = () => {
             <Button type="submit" className="shad-button_primary mt-5">
               {isUserLoading ? (
                 <>
-                  <Loader /> Loading...
+                  <Loader width={18} height={18}/> Loading...
                 </>
               ) : (
                 "Log in"

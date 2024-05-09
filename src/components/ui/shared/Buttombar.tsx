@@ -8,10 +8,10 @@ const Buttombar = () => {
       {bottombarLinks.map((link: INavLink) => {
         const isActive = pathname === link.route;
         return (
-          <li>
+          <li key={link.label}>
             <Link
               to={link.route}
-              key={link.label}
+              
               className={` flex-center flex-col gap-1 p-2 transition ${
                 isActive && "bg-primary-500 rounded-md "
               }`}
