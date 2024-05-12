@@ -4,8 +4,10 @@ import { Button } from "../button";
 import { useSignOutAccount } from "@/lib/reat-query/queriesAndMutation";
 import { useUserContext } from "@/context/AuthContext";
 
+
+//this comp just show on mobile device
 const Topbar = () => {
-  //sign out our user and delete user session from dratabase 
+  //sign out our user and delete user session from DB 
   const { mutate: signOut, isSuccess } = useSignOutAccount();
 
   const navigate = useNavigate();

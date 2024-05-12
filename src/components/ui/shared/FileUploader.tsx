@@ -1,4 +1,4 @@
-import  { useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 import { FileWithPath, useDropzone } from "react-dropzone";
 import { Button } from "../button";
 
@@ -12,22 +12,24 @@ const FileUploader = ({ fieldChange, mediaUrl }: Props) => {
 
   const [fileUrl, setFileUrl] = useState(mediaUrl);
 
+  //this function use usecallback hook for preventing re rendering 
   const onDrop = useCallback(
     (acceptedFiles: FileWithPath[]) => {
       setFile(acceptedFiles);
       fieldChange(acceptedFiles);
       setFileUrl(URL.createObjectURL(acceptedFiles[0]));
-      console.log(mediaUrl)
     },
     [file]
-   
   );
+
+  //we get input property and get property of input's container 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     accept: {
       "image/*": [".png", ".jpeg", ".jpg"],
     },
   });
+
   return (
     <div
       {...getRootProps()}
@@ -39,7 +41,7 @@ const FileUploader = ({ fieldChange, mediaUrl }: Props) => {
           <div className="flex flex-1 justify-center w-full p-5 lg:p-10">
             <img src={fileUrl} alt="image" className="file_uploader-img" />
           </div>
-          
+
           <p className="file_uploader-label">Click or drage photo to replace</p>
         </>
       ) : (

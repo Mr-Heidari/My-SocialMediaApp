@@ -3,11 +3,15 @@ import { Models } from "appwrite";
 import { Link } from "react-router-dom";
 import PostStats from "./PostStats";
 import { multiFormatDateString } from "@/lib/utils";
+
 type PostCardProps = {
     post: Models.Document;
   };
 
+
+//this component use on home page 
 const PostCard = ({post}: PostCardProps) => {
+  //get current user information
     const { user } = useUserContext();
 
     if (!post.creator) return;

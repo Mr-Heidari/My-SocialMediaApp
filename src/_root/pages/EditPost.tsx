@@ -3,8 +3,13 @@ import Loader from "@/components/ui/shared/Loader";
 import { useGetPostById } from "@/lib/reat-query/queriesAndMutation";
 import { useParams } from "react-router-dom";
 
+//edit post page
 const EditPost = () => {
+
+  //we set user id as dynamic rout and we can get id with useParams hook form react-router-dom
   const { id } = useParams();
+
+  //get post id with useparams and we fetch post data with post id from DB 
   const { data: post, isPending } = useGetPostById(id || "");
 
   if (isPending)

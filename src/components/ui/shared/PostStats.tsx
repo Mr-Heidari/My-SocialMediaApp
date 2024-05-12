@@ -17,20 +17,26 @@ type PostStatsProps = {
 };
 
 const PostStats = ({ post, userId }: PostStatsProps) => {
+  //get route data
   const location = useLocation();
+
+  //ceate list of user id evey body liked  post foreach post
   const likesList = post?.likes.map((user: Models.Document) => user.$id);
 
   const [likes, setLikes] = useState<string[]>(likesList);
+
   const [isSaved, setIsSaved] = useState(false);
 
+  //a action for send client data to DB and return changed data
   const { mutate: likePost } = useLikePost();
   const { mutate: savePost ,isPending:isSavingPost} = useSavePost();
   const { mutate: deleteSavePost,isPending:isDeletingSaved } = useDeleteSavedPost();
 
   const { data: currentUser } = useGetCurrentUser();
 
+  //current user get saved post 
   const savedPostRecord = currentUser?.save.find(
-    (record: Models.Document) => record.post.$id === post?.$id
+    (record: Models.Document) => record.post?.$id === post?.$id
   );
 
   useEffect(() => {
@@ -38,6 +44,7 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
   }, [currentUser]);
 
 
+ 
   const handleLikePost = (
     e: React.MouseEvent<HTMLImageElement, MouseEvent>
   ) => {
@@ -45,6 +52,7 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
 
     let likesArray = [...likes];
 
+     //check current user isliked on post
     if (likesArray.includes(userId)) {
       likesArray = likesArray.filter((Id) => Id !== userId);
     } else {
@@ -52,6 +60,7 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
     }
 
     setLikes(likesArray);
+    //send new list of likes for each post to DB
     likePost({ postId: post?.$id || '',  likesArray });
   };
 
@@ -65,6 +74,7 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
       return deleteSavePost(savedPostRecord.$id);
     }
 
+    //saved post id  to user collection  inside saved attribute on DB
     savePost({ userId: userId, postId: post.$id });
     setIsSaved(true);
   };

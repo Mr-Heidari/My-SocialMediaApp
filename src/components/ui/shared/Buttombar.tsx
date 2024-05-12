@@ -1,7 +1,11 @@
 import { bottombarLinks } from "@/constants";
 import { INavLink } from "@/types";
 import { useLocation, Link } from "react-router-dom";
+
+//show on mobile devices
 const Buttombar = () => {
+
+  //get route pathname
   const { pathname } = useLocation();
   return (
     <section className="bottom-bar">

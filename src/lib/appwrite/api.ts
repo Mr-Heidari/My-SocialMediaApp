@@ -3,6 +3,7 @@ import { INewPost, INewUser, IUpdatePost } from "@/types";
 import { account, appwriteConfig, avatars, databases, storage } from "./config";
 import { ID, ImageGravity, Query } from "appwrite";
 
+//create account request
 export async function createUserAccount(user: INewUser) {
   try {
     const newAccount = await account.create(
@@ -14,8 +15,10 @@ export async function createUserAccount(user: INewUser) {
 
     if (!newAccount) throw Error;
 
+    //create avatar image by initials user name
     const avatarUrl = avatars.getInitials(user.name);
 
+    //save user to DB
     const newUser = await saveUserToDB({
       accountId: newAccount.$id,
       name: newAccount.name,
@@ -30,6 +33,7 @@ export async function createUserAccount(user: INewUser) {
   }
 }
 
+//save account to out user collection in DB
 export async function saveUserToDB(user: {
   accountId: string;
   email: string;
@@ -51,6 +55,7 @@ export async function saveUserToDB(user: {
   }
 }
 
+//login account requset
 export async function signInAccount(user: { email: string; password: string }) {
   try {
     const session = await account.createEmailPasswordSession(
@@ -64,6 +69,7 @@ export async function signInAccount(user: { email: string; password: string }) {
   }
 }
 
+//on each browser and ip address user can just have 1 account are loged in
 export async function getCurrentUser() {
   try {
     const currentAccount = await account.get();
@@ -84,6 +90,7 @@ export async function getCurrentUser() {
   }
 }
 
+//logout account request
 export async function signOutAccount() {
   try {
     const session = await account.deleteSession("current");
@@ -93,20 +100,26 @@ export async function signOutAccount() {
     console.log(error);
   }
 }
+
+//=========================================post/ create / delete and ....
 export async function createPost(post: INewPost) {
   try {
     const uploadedFile = await uploadFile(post.file[0]);
 
     if (!uploadedFile) throw Error;
 
+    //check if image was uploaded on storage
     const fileUrl = getFilePreview(uploadedFile.$id);
 
     if (!fileUrl) {
       deleteFile(uploadedFile.$id);
       throw Error;
     }
+
+    //create array of tags
     const tags = post.tags?.replace(/ /g, "").split(",") || [];
 
+    //create post
     const newPost = await databases.createDocument(
       appwriteConfig.databaseId,
       appwriteConfig.postCollectionId,
@@ -132,6 +145,7 @@ export async function createPost(post: INewPost) {
   }
 }
 
+//upload post image resquest to storage 
 export async function uploadFile(file: File) {
   try {
     const uploadedFile = await storage.createFile(
@@ -146,6 +160,7 @@ export async function uploadFile(file: File) {
   }
 }
 
+//get image from storage
 export function getFilePreview(fileId: string) {
   try {
     const fileUrl = storage.getFilePreview(
@@ -165,6 +180,7 @@ export function getFilePreview(fileId: string) {
   }
 }
 
+//delete post image
 export async function deleteFile(fileId: string) {
   try {
     await storage.deleteFile(appwriteConfig.storageId, fileId);
@@ -175,6 +191,7 @@ export async function deleteFile(fileId: string) {
   }
 }
 
+//get recent by time creation
 export async function getRecentPosts() {
   const posts = await databases.listDocuments(
     appwriteConfig.databaseId,
@@ -187,6 +204,7 @@ export async function getRecentPosts() {
   return posts;
 }
 
+// Delete Post
 export async function deletePost(postId?: string, imageId?: string) {
   if (!postId || !imageId) return;
 
@@ -207,27 +225,7 @@ export async function deletePost(postId?: string, imageId?: string) {
   }
 }
 
-// ============================== LIKE / UNLIKE POST
-export async function likePost(postId: string, likesArray: string[]) {
-  try {
-    const updatedPost = await databases.updateDocument(
-      appwriteConfig.databaseId,
-      appwriteConfig.postCollectionId,
-      postId,
-      {
-        likes: likesArray,
-      }
-    );
-
-    if (!updatedPost) throw Error;
-
-    return updatedPost;
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-// ============================== SAVE POST
+// SAVE POST : each user can save post
 export async function savePost(userId: string, postId: string) {
   try {
     const updatedPost = await databases.createDocument(
@@ -248,6 +246,7 @@ export async function savePost(userId: string, postId: string) {
   }
 }
 
+// Update Post
 export async function updatePost(post: IUpdatePost) {
   const hasFileToUpdate = post.file.length > 0;
 
@@ -311,7 +310,27 @@ export async function updatePost(post: IUpdatePost) {
   }
 }
 
-// ============================== DELETE SAVED POST
+//LIKE / UNLIKE POST
+export async function likePost(postId: string, likesArray: string[]) {
+  try {
+    const updatedPost = await databases.updateDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.postCollectionId,
+      postId,
+      {
+        likes: likesArray,
+      }
+    );
+
+    if (!updatedPost) throw Error;
+
+    return updatedPost;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+// ============================== Remove SAVED POST 
 export async function deleteSavedPost(savedRecordId: string) {
   try {
     const statusCode = await databases.deleteDocument(
@@ -328,6 +347,7 @@ export async function deleteSavedPost(savedRecordId: string) {
   }
 }
 
+// User Posts
 export async function getUserPosts(userId?: string) {
   if (!userId) return;
 
@@ -346,6 +366,7 @@ export async function getUserPosts(userId?: string) {
   }
 }
 
+// get selected postId
 export async function getPostById(postId?: string) {
   if (!postId) throw Error;
 
@@ -364,6 +385,7 @@ export async function getPostById(postId?: string) {
   }
 }
 
+// re fetch posts when reach end of posts post limit set on 9  
 export async function getInfinitePosts({ pageParam }: { pageParam: number }) {
   const queries: any[] = [Query.orderDesc("$updatedAt"), Query.limit(9)];
 
@@ -386,6 +408,7 @@ export async function getInfinitePosts({ pageParam }: { pageParam: number }) {
   }
 }
 
+//serach post by caption
 export async function searchPosts(searchTerm: string) {
   try {
     const posts = await databases.listDocuments(

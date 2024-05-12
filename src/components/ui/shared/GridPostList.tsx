@@ -1,11 +1,11 @@
 import { Models } from "appwrite";
 import { Link } from "react-router-dom";
 
-import  PostStats  from "@/components/ui/shared/PostStats";
+import PostStats from "@/components/ui/shared/PostStats";
 import { useUserContext } from "@/context/AuthContext";
 
 type GridPostListProps = {
-  posts: Models.Document[]|undefined;
+  posts: Models.Document[] | undefined;
   showUser?: boolean;
   showStats?: boolean;
 };
@@ -15,6 +15,8 @@ const GridPostList = ({
   showUser = true,
   showStats = true,
 }: GridPostListProps) => {
+
+  //get current user information
   const { user } = useUserContext();
 
   return (

@@ -30,7 +30,11 @@ type PostFormProps = {
 const PostForm = ({ post, action }: PostFormProps) => {
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  //get user information
   const { user } = useUserContext();
+
+  //we create form with useform hook and set input validation with zod library
   const form = useForm<z.infer<typeof PostValidation>>({
     resolver: zodResolver(PostValidation),
     defaultValues: {
@@ -41,7 +45,7 @@ const PostForm = ({ post, action }: PostFormProps) => {
     },
   });
 
-  // Query
+  
   const { mutateAsync: createPost, isPending: isLoadingCreate } =
     useCreatePost();
   const { mutateAsync: updatePost, isPending: isLoadingUpdate } =
@@ -137,7 +141,7 @@ const PostForm = ({ post, action }: PostFormProps) => {
           control={form.control}
           name="tags"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="relative">
               <FormLabel className="shad-form_label">
                 Add Tags (separated by comma " , ")
               </FormLabel>

@@ -13,17 +13,29 @@ import { multiFormatDateString } from "@/lib/utils";
 import { useUserContext } from "@/context/AuthContext";
 import PostStats from "@/components/ui/shared/PostStats";
 
+//each post have specifie page 
 const PostDetails = () => {
   const navigate = useNavigate();
+
+  //get id of post with rout address
   const { id } = useParams();
+
+  //get current user data 
   const { user } = useUserContext();
 
   const { data: post, isLoading } = useGetPostById(id||'');
+  
+
+  //get posts match with postcreator 
   const { data: userPosts, isLoading: isUserPostLoading } = useGetUserPosts(
     post?.creator.$id
   );
+
+
+  //delete post 
   const { mutate: deletePost } = useDeletePost();
 
+  //show related post(other posts created by creator of current post) under current post
   const relatedPosts = userPosts?.documents.filter(
     (userPost) => userPost.$id !== id
   );

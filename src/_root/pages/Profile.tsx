@@ -19,6 +19,7 @@ interface StabBlockProps {
   label: string;
 }
 
+//this comp work like following and follower in instagram
 const StatBlock = ({ value, label }: StabBlockProps) => (
   <div className="flex-center gap-2">
     <p className="small-semibold lg:body-bold text-primary-500">{value}</p>
@@ -26,13 +27,22 @@ const StatBlock = ({ value, label }: StabBlockProps) => (
   </div>
 );
 
+//profile page
 const Profile = () => {
+
+  //get user id from route
   const { id } = useParams();
+
+  //get user information from context hook
   const { user } = useUserContext();
+
+  //get route path
   const { pathname } = useLocation();
 
-  const { data: currentUser } = useGetUserById(id || "");
+  //get user information from DB
+  const { data: currentUser  } = useGetUserById(id || "");
 
+  //current user data isPending
   if (!currentUser)
     return (
       <div className="flex-center w-full h-full">

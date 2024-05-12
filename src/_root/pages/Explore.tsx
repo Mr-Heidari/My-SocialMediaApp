@@ -13,11 +13,19 @@ export type SearchResultProps = {
   searchedPosts: any;
 };
 
+
+//in explor page we can have 2 scenario 1 of them if user want search posts  so we render some jsx elemnet
 const SearchResults = ({ isSearchFetching, searchedPosts }: SearchResultProps) => {
+
+  //if our fetching data was on isfetching property on useQuery hook in react-query lib
   if (isSearchFetching) {
     return <Loader width={30} height={30} />;
+
+    // if data fetchet and data array have lenght
   } else if (searchedPosts && searchedPosts.documents.length > 0) {
     return <GridPostList posts={searchedPosts.documents} />;
+
+    //if search result wasnt match with any post captions
   } else {
     return (
       <p className="text-light-4 mt-10 text-center w-full">No results found</p>
@@ -25,28 +33,47 @@ const SearchResults = ({ isSearchFetching, searchedPosts }: SearchResultProps) =
   }
 };
 
+//explor page
 const Explore = () => {
+
+  /*this package have hook  when  element enter or leave viewport  on page that mean elemnt come inside of our pageview  or leave it 
+  so we can set him on container */
   const { ref, inView } = useInView();
+
+  //we use useInfiniteQuery from react query for get posts with limit and every time we reach end of our page we get another 9 posts we can see nicee loader on bottom of page with useInview hook until posts loaded
   const { data: posts, fetchNextPage, hasNextPage } = useGetPosts();
 
+
+  //search value send to our DB for searching by caption
   const [searchValue, setSearchValue] = useState("");
+
+  //make samll delay if user thinking or slow type For the purpose of receiving the data, get it.
   const debouncedSearch = useDebounce(searchValue, 500);
+  
+  //fetch posts by searchvalue 
   const { data: searchedPosts, isFetching: isSearchFetching } = useSearchPosts(debouncedSearch);
 
+
+  //fetch next page of posts if we have nextpage
   useEffect(() => {
     if (inView && !searchValue) {
       fetchNextPage();
     }
   }, [inView, searchValue]);
 
+ 
+  //data not yet recive
   if (!posts)
     return (
-      <div className="flex-center w-full h-full">
+      <div className="flex-center w-full h-full" >
         <Loader width={30} height={30}/>
       </div>
     );
 
+  //check we have serch value or not
   const shouldShowSearchResults = searchValue !== "";
+
+  //check if we dont have search value and we dont have any posts
   const shouldShowPosts = !shouldShowSearchResults && 
     posts.pages.every((item) => item?.documents.length === 0);
 
@@ -95,7 +122,7 @@ const Explore = () => {
             searchedPosts={searchedPosts}
           />
         ) : shouldShowPosts ? (
-          <p className="text-light-4 mt-10 text-center w-full">End of posts</p>
+          <p className="text-light-4 mt-10 text-center w-full" >End of posts</p>
         ) : (
           posts.pages.map((item, index) => (
             <GridPostList key={`page-${index}`} posts={item?.documents} />

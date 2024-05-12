@@ -1,5 +1,6 @@
 import PostForm from "@/components/ui/forms/PostForm";
 
+//create post Page
 const CreatePost = () => {
   return (
     <div className="flex flex-1">

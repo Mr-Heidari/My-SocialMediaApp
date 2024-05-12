@@ -6,7 +6,11 @@ import { useUserContext } from "@/context/AuthContext";
 import { sidebarLinks } from "@/constants";
 import { INavLink } from "@/types";
 
+
+//this just show on desltop version and its navigator bar
 const LeftSidebar = () => {
+
+  //get route pathname 
   const { pathname } = useLocation();
 
   //sign out our user and delete user session from dratabase

@@ -4,6 +4,7 @@ import { useGetCurrentUser } from "@/lib/reat-query/queriesAndMutation";
 import Loader from "@/components/ui/shared/Loader";
 import GridPostList from "@/components/ui/shared/GridPostList";
 
+//this comp is like tab in profile page
 const Saved = () => {
   const { data: currentUser } = useGetCurrentUser();
 

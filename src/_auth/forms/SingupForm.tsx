@@ -56,8 +56,11 @@ const SingupForm = () => {
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof SingupValidation>) {
 
+    //first create account on DB
     const newUser = await createUserAccount(values);
 
+
+    //if creation failed
     if (!newUser) {
       
       return toast({
@@ -65,20 +68,25 @@ const SingupForm = () => {
       });
     }
 
-    //user will sign in
+    //save browser and ip address and device on DB with user email and passwrod
     const session = await signInAccount({
       email: values.email,
       password: values.password,
     });
 
+    //if saved failed
     if (!session) {
       console.log(session)
       return toast({ title: "title: Sign in failed. Please try again." })
 
     }
 
+
+    //we need this cuz wanna all of our entire app know user is logged in or not on DB
     const isLoggedIn = await checkAuthUser();
 
+
+    //if user was on DB as logged in user next go to home page
     if (isLoggedIn) {
       form.reset();
 

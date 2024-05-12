@@ -47,19 +47,24 @@ const SinginForm = () => {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof SinginValidation>) {
+
+    //save browser and ip address and device on DB with user email and passwrod
     const session = await signInAccount({
       email: values.email,
       password: values.password,
     });
 
+    //if saved failed
     if (!session) {
       console.log(session)
       return toast({ title: "title: Sign in failed. Please try again." })
 
     }
 
+    
     const isLoggedIn = await checkAuthUser();
 
+    //check if user account was saved in DB next go to home page 
     if (isLoggedIn) {
       form.reset();
 
