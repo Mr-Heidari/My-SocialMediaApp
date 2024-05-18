@@ -73,7 +73,8 @@ const PersonalizationForm = () => {
     //revalidate our user data before navigate to home page
     checkAuthUser();
 
-    navigate("/");
+    if(statusCode){navigate("/");}
+    
   };
 
   return (
