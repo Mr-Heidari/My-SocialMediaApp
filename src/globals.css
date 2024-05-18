@@ -193,7 +193,7 @@
 
   /* Bottom bar */
   .bottom-bar {
-    @apply z-50 absolute flex-between w-full border-t-2 border-white/60 drop-shadow-[0_-25px_20px_rgba(0,0,0,0.6)] -bottom-1 rounded-t-[20px] bg-neutral-900 px-5 py-3 md:hidden;
+    @apply z-40 absolute flex-between w-full border-t-2 border-white/60 drop-shadow-[0_-25px_20px_rgba(0,0,0,0.6)] -bottom-1 rounded-t-[20px] bg-neutral-900 px-5 py-3 md:hidden;
   }
 
   /* File uploader */
