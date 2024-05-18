@@ -18,7 +18,7 @@ const RightSideBar = () => {
     <>
     <div className="rightsidebar ">
       <p className="absolute top-4 text-white/70">Suggested for you</p>
-      <div className="flex flex-row flex-wrap gap-2 h-full  overflow-y-auto custom-scrollbar">
+      <div className="flex flex-row flex-wrap gap-2 h-fit  overflow-y-auto custom-scrollbar">
         {suggestedUsers?.map((user) => (
           <UserCard
             key={user.$createdAt}
