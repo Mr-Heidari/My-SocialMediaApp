@@ -1,49 +1,65 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
-import  Loader  from "@/components/ui/shared/Loader";
-import  GridPostList  from "@/components/ui/shared/GridPostList";
+import Loader from "@/components/ui/shared/Loader";
+import GridPostList from "@/components/ui/shared/GridPostList";
 
 import {
   useGetPostById,
   useGetUserPosts,
   useDeletePost,
+  useDeleteSavedPost,
 } from "@/lib/reat-query/queriesAndMutation";
 import { multiFormatDateString } from "@/lib/utils";
 import { useUserContext } from "@/context/AuthContext";
 import PostStats from "@/components/ui/shared/PostStats";
+import { useEffect } from "react";
 
-//each post have specifie page 
+//each post have specifie page
 const PostDetails = () => {
   const navigate = useNavigate();
 
   //get id of post with rout address
   const { id } = useParams();
 
-  //get current user data 
+  //get current user data
   const { user } = useUserContext();
 
-  const { data: post, isLoading } = useGetPostById(id||'');
-  
+  const { data: post, isLoading } = useGetPostById(id || "");
 
-  //get posts match with postcreator 
+  //get posts match with postcreator
   const { data: userPosts, isLoading: isUserPostLoading } = useGetUserPosts(
     post?.creator.$id
   );
 
+  //delete post
+  const {
+    mutate: deletePost,
+    isPending: isDeleting,
+    isSuccess,
+  } = useDeletePost();
 
-  //delete post 
-  const { mutate: deletePost } = useDeletePost();
-
+  const { mutate: DeleteSavedPost } = useDeleteSavedPost();
   //show related post(other posts created by creator of current post) under current post
   const relatedPosts = userPosts?.documents.filter(
     (userPost) => userPost.$id !== id
   );
 
-  const handleDeletePost = () => {
-    deletePost({ postId: id, imageId: post?.imageId });
-    navigate(-1);
+  const deleteSavedPost = () => {
+    post?.save.map((save) => {
+      DeleteSavedPost(save.$id);
+    });
   };
+
+  const handleDeletePost = async () => {
+    deleteSavedPost()
+    deletePost({ postId: id, imageId: post?.imageId });
+    
+  };
+
+  useEffect(() => {
+    if (isSuccess) navigate("/");
+  }, [isSuccess]);
 
   return (
     <div className="post_details-container">
@@ -51,7 +67,8 @@ const PostDetails = () => {
         <Button
           onClick={() => navigate(-1)}
           variant="ghost"
-          className="shad-button_ghost  hover:invert">
+          className="shad-button_ghost  hover:invert"
+        >
           <img
             src={"/assets/icons/back.svg"}
             alt="back"
@@ -64,7 +81,7 @@ const PostDetails = () => {
       </div>
 
       {isLoading || !post ? (
-        <Loader width={30} height={30}/>
+        <Loader width={30} height={30} />
       ) : (
         <div className="post_details-card">
           <img
@@ -77,7 +94,8 @@ const PostDetails = () => {
             <div className="flex-between w-full">
               <Link
                 to={`/profile/${post?.creator.$id}`}
-                className="flex items-center gap-3">
+                className="flex items-center gap-3"
+              >
                 <img
                   src={
                     post?.creator.imageUrl ||
@@ -105,7 +123,8 @@ const PostDetails = () => {
               <div className="flex-center gap-4">
                 <Link
                   to={`/update-post/${post?.$id}`}
-                  className={`${user.id !== post?.creator.$id && "hidden"}`}>
+                  className={`${user.id !== post?.creator.$id && "hidden"}`}
+                >
                   <img
                     src={"/assets/icons/edit.svg"}
                     alt="edit"
@@ -120,13 +139,18 @@ const PostDetails = () => {
                   variant="ghost"
                   className={`ost_details-delete_btn ${
                     user.id !== post?.creator.$id && "hidden"
-                  }`}>
-                  <img
-                    src={"/assets/icons/delete.svg"}
-                    alt="delete"
-                    width={24}
-                    height={24}
-                  />
+                  }`}
+                >
+                  {!isDeleting ? (
+                    <img
+                      src={"/assets/icons/delete.svg"}
+                      alt="delete"
+                      width={24}
+                      height={24}
+                    />
+                  ) : (
+                    <Loader width={24} height={24} />
+                  )}
                 </Button>
               </div>
             </div>
@@ -139,7 +163,8 @@ const PostDetails = () => {
                 {post?.tags.map((tag: string, index: string) => (
                   <li
                     key={`${tag}${index}`}
-                    className="text-gray-500 small-regular">
+                    className="text-gray-500 small-regular"
+                  >
                     #{tag}
                   </li>
                 ))}
@@ -160,7 +185,7 @@ const PostDetails = () => {
           More Related Posts
         </h3>
         {isUserPostLoading || !relatedPosts ? (
-          <Loader width={30} height={30}/>
+          <Loader width={30} height={30} />
         ) : (
           <GridPostList posts={relatedPosts} />
         )}

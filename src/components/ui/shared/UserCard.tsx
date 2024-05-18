@@ -47,7 +47,7 @@ const UserCard = ({ name, imageUrl, userName, id }: UserCardProps) => {
             width={40}
             height={40}
             alt=""
-            className="rounded-full"
+            className="rounded-full object-cover w-14 h-14"
           />
           <div>
             <p className="h-fit overflow-hidden w-24  text-ellipsis text-center mx-auto">

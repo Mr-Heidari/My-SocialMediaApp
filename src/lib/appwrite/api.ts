@@ -104,15 +104,14 @@ export async function signOutAccount() {
 //=========================================post/ create / delete and ....
 export async function createPost(post: INewPost) {
   try {
-
     const uploadedFile = await uploadFile(post.file[0]);
-    console.log(uploadedFile)
+    console.log(uploadedFile);
     if (!uploadedFile) throw Error;
 
     //check if image was uploaded on storage
-    
+
     const fileUrl = getFilePreview(uploadedFile.$id);
-    console.log(fileUrl)
+    console.log(fileUrl);
     if (!fileUrl) {
       deleteFile(uploadedFile.$id);
       throw Error;
@@ -121,7 +120,7 @@ export async function createPost(post: INewPost) {
     //create array of tags
     const tags = post.tags?.replace(/ /g, "").split(",") || [];
 
-    console.log(tags)
+    console.log(tags);
     //create post
     const newPost = await databases.createDocument(
       appwriteConfig.databaseId,
@@ -136,7 +135,7 @@ export async function createPost(post: INewPost) {
         tags: tags,
       }
     );
-    console.log(newPost)
+    console.log(newPost);
     if (!newPost) {
       await deleteFile(uploadedFile.$id);
       throw Error;
@@ -208,7 +207,10 @@ export async function getRecentPosts() {
 }
 
 // Delete Post
-export async function deletePost(postId?: string, imageId?: string) {
+export async function deletePost(
+  postId?: string,
+  imageId?: string,
+) {
   if (!postId || !imageId) return;
 
   try {
@@ -554,6 +556,7 @@ export async function updateProfile({
       if (!uploadedFile) throw Error;
 
       const fileUrl = getProfileImagePreview(uploadedFile.$id);
+
       if (!fileUrl) {
         await deleteFile(uploadedFile.$id);
         throw Error;
@@ -566,6 +569,7 @@ export async function updateProfile({
           await deleteFile(uploadedFile.$id);
           throw Error;
         }
+
         await databases.updateDocument(
           appwriteConfig.databaseId,
           appwriteConfig.userCollectionId,

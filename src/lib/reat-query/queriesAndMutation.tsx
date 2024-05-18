@@ -187,9 +187,10 @@ export const useDeletePost = () => {
     mutationFn: ({ postId, imageId }: { postId?: string; imageId: string }) =>
       deletePost(postId, imageId),
     onSuccess: () => {
-      queryClient.invalidateQueries({
+      Promise.all([queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_RECENT_POSTS],
-      });
+      })])
+      
     },
   });
 };

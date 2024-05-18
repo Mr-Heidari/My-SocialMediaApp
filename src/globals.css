@@ -202,7 +202,7 @@
   }
 
   .file_uploader-label {
-    @apply text-light-3 text-center small-regular w-full p-4 border-t border-t-dark-4;
+    @apply text-white/70 text-center small-regular w-full p-4 border-t border-t-dark-4;
   }
 
   .file_uploader-box {

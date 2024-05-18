@@ -14,7 +14,7 @@ const EditPost = () => {
 
   if (isPending)
     return (
-      <div className="flex">
+      <div className="flex w-full top-1/2 translate-y-1/2">
         <div className="mx-auto">
         <Loader width={30} height={30}/>
         </div>
