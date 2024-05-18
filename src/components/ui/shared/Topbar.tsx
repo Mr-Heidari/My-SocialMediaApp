@@ -2,15 +2,19 @@ import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSignOutAccount } from "@/lib/reat-query/queriesAndMutation";
 import { useUserContext } from "@/context/AuthContext";
-
+import Loader from "./Loader";
 
 //this comp just show on mobile device
 const Topbar = () => {
-  //sign out our user and delete user session from DB 
-  const { mutate: signOut, isSuccess } = useSignOutAccount();
+  //sign out our user and delete user session from DB
+  const {
+    mutate: signOut,
+    isSuccess,
+    isPending: isLoggedOut,
+  } = useSignOutAccount();
 
   const navigate = useNavigate();
-  
+
   //we can access user information with useContext
   const { user } = useUserContext();
 
@@ -23,7 +27,7 @@ const Topbar = () => {
     <section className="topbar">
       <div className=" flex-between py-2 px-5 ">
         <Link to="/" className="flex gap-33 items-center">
-        <div className="flex flex-row gap-2">
+          <div className="flex flex-row gap-2">
             <img
               src="/assets/images/logo.svg"
               width={36}
@@ -36,25 +40,29 @@ const Topbar = () => {
         </Link>
 
         <div className="gap-4 flex">
-        <button
-          className=" hover:bg-white/70 rounded-md cursor-pointer transition-colors duration-200 "
-          onClick={() => signOut()}
-        >
-          <div className="flex flex-row gap-2 w-full brightness-200 hover:brightness-0 p-2  ">
+          <button
+            className=" hover:bg-white/70 rounded-md cursor-pointer transition-colors duration-200 "
+            onClick={() => signOut()}
+          >
+            <div className="flex flex-row gap-2 w-full brightness-200 hover:brightness-0 p-2  ">
+              {!isLoggedOut ? (
+                <img
+                  src="/assets/icons/logout.svg "
+                  alt="logout"
+                  className=""
+                />
+              ) : (
+                <Loader width={30} height={30} />
+              )}
+            </div>
+          </button>
+          <Link to={`/profile/${user.id}`} className="flex gap-3 items-center">
             <img
-              src="/assets/icons/logout.svg "
-              alt="logout"
-              className=""
+              src={user.imageUrl || "/assets/icons/profile-placeholder.svg"}
+              alt="profile"
+              className="w-8 h-8 rounded-full object-cover "
             />
-          </div>
-        </button>
-        <Link to={`/profile/${user.id}`} className="flex gap-3 items-center">
-          <img
-            src={user.imageUrl || "/assets/icons/profile-placeholder.svg"}
-            alt="profile"
-            className="w-8 h-8 rounded-full object-cover "
-          />
-        </Link>
+          </Link>
         </div>
       </div>
     </section>
