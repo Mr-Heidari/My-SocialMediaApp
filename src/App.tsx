@@ -1,8 +1,4 @@
-import {
-  Route,
-
-  Routes,
-} from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 
 import "./globals.css";
 
@@ -25,13 +21,12 @@ import { Toaster } from "@/components/ui/toaster";
 import PersonalizationForm from "./_auth/forms/PersonalizationForm";
 import ErrorPage from "./_error/ErrorPage";
 
-
 export const App = () => {
   return (
     <>
       <main className=" flex h-screen">
-      <Routes>
-      <Route path='*' element={<ErrorPage />}/>
+        <Routes>
+          <Route path="*" element={<ErrorPage />} />
           <Route path="/pesonalizeProfile" element={<PersonalizationForm />} />
           <Route element={<AuthLayout />}>
             {/**public routes : every body can see */}
