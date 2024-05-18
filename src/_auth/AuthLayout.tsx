@@ -1,9 +1,9 @@
+import { useUserContext } from "@/context/AuthContext";
 import { Outlet, Navigate } from "react-router-dom";
 
-
-//a beautifull layout for our sign in and sign up form 
+//a beautifull layout for our sign in and sign up form
 const AuthLayout = () => {
-  const isAuthenticated = false;
+  const { isAuthenticated } = useUserContext();
   return (
     <>
       {isAuthenticated ? (
@@ -14,8 +14,14 @@ const AuthLayout = () => {
             <Outlet />
           </section>
 
-          <img src="/assets/images/side-img.jpg" alt="logo" className="w-full absolute h-screen object-cover blur-sm bg-black/70" />
-          <div className="w-full absolute h-screen bg-black/40 bg-gradient-to-t   from-black/50"> </div>
+          <img
+            src="/assets/images/side-img.jpg"
+            alt="logo"
+            className="w-full absolute h-screen object-cover blur-sm bg-black/70"
+          />
+          <div className="w-full absolute h-screen bg-black/40 bg-gradient-to-t   from-black/50">
+            {" "}
+          </div>
         </>
       )}
     </>

@@ -32,7 +32,7 @@ const PostCard = ({post}: PostCardProps) => {
             </Link>
   
             <div className="flex flex-col ">
-              <p className="base-medium lg:body-bold text-light-1">
+              <p className="text-sm lg:body-bold text-light-1">
                 {post.creator.name}
               </p>
               <div className="flex-center gap-2 text-gray-500 ">
@@ -61,11 +61,11 @@ const PostCard = ({post}: PostCardProps) => {
         </div>
   
         <Link to={`/posts/${post.$id}`} className="relative overflow-hidden">
-          <div className="small-medium lg:base-medium pb-5 px-5">
+          <div className="text-sm lg:base-medium pb-5 px-5">
             <p>{post.caption}</p>
             <ul className="flex gap-1 mt-2">
               {post.tags.map((tag: string, index: string) => (
-                <li key={`${tag}${index}`} className="text-white/70 small-regular bg-zinc-600 p-1 rounded-md">
+                <li key={`${tag}${index}`} className="text-white/70 text-xs bg-zinc-600 p-1 rounded-md">
                   #{tag}
                 </li>
               ))}
