@@ -97,7 +97,7 @@ const UpdateProfile = () => {
 
   return (
     <>
-      <div className="overflow-auto max-md:px-5  max-md:py-24 max-h-screen custom-scrollbar w-full p-10">
+      <div className="overflow-auto max-md:px-5  max-md:py-24 max-md:pb-40  max-h-screen custom-scrollbar w-full p-10">
         <h1 className="mx-10 font-extrabold m-5 flex flex-row gap-2 mb-10">
           <img
             src="/assets/icons/profile-icone.svg"

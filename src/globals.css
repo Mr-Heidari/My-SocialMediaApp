@@ -109,7 +109,7 @@
   }
 
   .common-container {
-    @apply flex flex-col flex-1 items-center gap-10 overflow-auto py-10 max-md:py-20 max-h-screen px-5 md:px-8 lg:p-14 custom-scrollbar;
+    @apply flex flex-col flex-1 items-center gap-10 overflow-auto py-10 max-md:py-20 max-md:pb-40  max-h-screen px-5 md:px-8 lg:p-14 custom-scrollbar;
   }
 
   /* All Users */
@@ -124,7 +124,7 @@
   /* Explore */
   .explore-container {
     @apply flex flex-col flex-1 items-center overflow-scroll py-10 px-5 md:p-14 custom-scrollbar
-     max-md:py-20  overflow-x-hidden max-h-screen  h-full;
+     max-md:py-20  max-md:pb-40  overflow-x-hidden max-h-screen  h-full;
   }
 
   .explore-inner_container {
@@ -137,7 +137,7 @@
 
   /* Home */
   .home-container {
-    @apply flex flex-col flex-1 items-center  gap-10 overflow-scroll py-10 px-5 md:px-8 lg:p-14 custom-scrollbar max-md:py-20 max-md:pb-36 overflow-x-hidden max-h-screen  h-full;
+    @apply flex flex-col flex-1 items-center  gap-10 overflow-scroll py-10 px-5 md:px-8 lg:p-14 custom-scrollbar max-md:py-20 max-md:pb-40  overflow-x-hidden max-h-screen  h-full;
   }
 
   .home-posts {
@@ -150,7 +150,7 @@
 
   /* Post Details */
   .post_details-container {
-    @apply flex flex-col flex-1 gap-10 overflow-auto py-10 max-md:py-20 px-5 md:p-14 custom-scrollbar items-center max-h-screen;
+    @apply flex flex-col flex-1 gap-10 overflow-auto py-10 max-md:py-20 max-md:pb-40  px-5 md:p-14 custom-scrollbar items-center max-h-screen;
   }
 
   .post_details-card {
@@ -171,7 +171,7 @@
 
   /* Profile */
   .profile-container {
-    @apply flex flex-col items-center  flex-1 gap-10 overflow-auto py-10 px-16  custom-scrollbar  max-h-screen max-md:px-5 h-full max-md:py-24;
+    @apply flex flex-col items-center  flex-1 gap-10 overflow-auto py-10 px-16  custom-scrollbar  max-h-screen max-md:px-5 h-full max-md:py-24 max-md:pb-40 ;
   }
 
   .profile-inner_container {
@@ -183,12 +183,12 @@
   }
 
   .peoplemobile {
-    @apply w-full h-screen  lg:hidden max-h-screen overflow-auto py-20 max-md:py-10 custom-scrollbar;
+    @apply w-full h-screen  lg:hidden max-h-screen overflow-auto py-20 max-md:pb-40  max-md:py-10 custom-scrollbar;
   }
 
   /* Saved */
   .saved-container {
-    @apply flex flex-col  flex-1 items-center gap-10  overflow-scroll py-10 px-16 md:p-14 custom-scrollbar max-md:py-20 max-md:pb-36 max-md:px-5 overflow-x-hidden max-h-screen  h-full;
+    @apply flex flex-col  flex-1 items-center gap-10  overflow-scroll py-10 px-16 md:p-14 custom-scrollbar max-md:py-20 max-md:pb-40 max-md:px-5 overflow-x-hidden max-h-screen  h-full;
   }
 
   /* Bottom bar */

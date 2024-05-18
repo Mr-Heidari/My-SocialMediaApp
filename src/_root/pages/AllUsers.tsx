@@ -119,7 +119,7 @@ const AllUsers = () => {
 
       {/** tablet, ipad, mobile, etc.. */}
 
-      <div className="peoplemobile">
+      <div className="peoplemobile ">
         <div className="p-5 md:p-10">
         <h2 className="h3-bold md:h2-bold w-full mb-5 mt-5">Search Users</h2>
         <div className="flex gap-1 px-4 w-full rounded-lg bg-dark-4">
