@@ -60,7 +60,7 @@ const PersonalizationForm = () => {
   ) => {
     const statusCode = await updateProfile({
       user: user,
-      avatarFile: value.file,
+      avatarFile: value,
       bio: value.bio,
     });
 
