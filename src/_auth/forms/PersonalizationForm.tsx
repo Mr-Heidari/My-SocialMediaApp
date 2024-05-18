@@ -42,7 +42,7 @@ const PersonalizationForm = () => {
     resolver: zodResolver(PresonalizeProfileValidation),
     defaultValues: {
       bio: "",
-      file: [],
+      file: File[''],
     },
   });
 
@@ -60,7 +60,7 @@ const PersonalizationForm = () => {
   ) => {
     const statusCode = await updateProfile({
       user: user,
-      avatarFile: value,
+      avatarFile: value.file,
       bio: value.bio,
     });
 
