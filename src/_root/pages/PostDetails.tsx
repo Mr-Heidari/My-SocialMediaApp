@@ -47,16 +47,17 @@ const PostDetails = () => {
 
   return (
     <div className="post_details-container">
-      <div className="hidden md:flex max-w-5xl w-full">
+      <div className=" max-w-5xl w-full">
         <Button
           onClick={() => navigate(-1)}
           variant="ghost"
-          className="shad-button_ghost">
+          className="shad-button_ghost  hover:invert">
           <img
             src={"/assets/icons/back.svg"}
             alt="back"
             width={24}
             height={24}
+            className="invert brightness-0 "
           />
           <p className="small-medium lg:base-medium">Back</p>
         </Button>
@@ -83,13 +84,13 @@ const PostDetails = () => {
                     "/assets/icons/profile-placeholder.svg"
                   }
                   alt="creator"
-                  className="w-8 h-8 lg:w-12 lg:h-12 rounded-full"
+                  className="w-8 h-8 lg:w-12 lg:h-12 rounded-full "
                 />
                 <div className="flex gap-1 flex-col">
                   <p className="base-medium lg:body-bold text-light-1">
                     {post?.creator.name}
                   </p>
-                  <div className="flex-center gap-2 text-light-3">
+                  <div className="flex-center gap-2 text-gray-500">
                     <p className="subtle-semibold lg:small-regular ">
                       {multiFormatDateString(post?.$createdAt)}
                     </p>
@@ -110,6 +111,7 @@ const PostDetails = () => {
                     alt="edit"
                     width={24}
                     height={24}
+                    className="invert brightness-0"
                   />
                 </Link>
 
@@ -137,7 +139,7 @@ const PostDetails = () => {
                 {post?.tags.map((tag: string, index: string) => (
                   <li
                     key={`${tag}${index}`}
-                    className="text-light-3 small-regular">
+                    className="text-gray-500 small-regular">
                     #{tag}
                   </li>
                 ))}

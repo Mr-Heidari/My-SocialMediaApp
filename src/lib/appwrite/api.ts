@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { INewPost, INewUser, IUpdatePost } from "@/types";
 import { account, appwriteConfig, avatars, databases, storage } from "./config";
-import { ID, ImageGravity, Query } from "appwrite";
+import { ID, ImageGravity, Models, Query } from "appwrite";
 
 //create account request
 export async function createUserAccount(user: INewUser) {
@@ -104,13 +104,15 @@ export async function signOutAccount() {
 //=========================================post/ create / delete and ....
 export async function createPost(post: INewPost) {
   try {
-    const uploadedFile = await uploadFile(post.file[0]);
 
+    const uploadedFile = await uploadFile(post.file[0]);
+    console.log(uploadedFile)
     if (!uploadedFile) throw Error;
 
     //check if image was uploaded on storage
+    
     const fileUrl = getFilePreview(uploadedFile.$id);
-
+    console.log(fileUrl)
     if (!fileUrl) {
       deleteFile(uploadedFile.$id);
       throw Error;
@@ -119,6 +121,7 @@ export async function createPost(post: INewPost) {
     //create array of tags
     const tags = post.tags?.replace(/ /g, "").split(",") || [];
 
+    console.log(tags)
     //create post
     const newPost = await databases.createDocument(
       appwriteConfig.databaseId,
@@ -133,7 +136,7 @@ export async function createPost(post: INewPost) {
         tags: tags,
       }
     );
-
+    console.log(newPost)
     if (!newPost) {
       await deleteFile(uploadedFile.$id);
       throw Error;
@@ -145,7 +148,7 @@ export async function createPost(post: INewPost) {
   }
 }
 
-//upload post image resquest to storage 
+//upload post image resquest to storage
 export async function uploadFile(file: File) {
   try {
     const uploadedFile = await storage.createFile(
@@ -169,7 +172,7 @@ export function getFilePreview(fileId: string) {
       2000,
       2000,
       ImageGravity.Top,
-      100
+      50
     );
     console.log(fileUrl);
     if (!fileUrl) throw Error;
@@ -330,7 +333,7 @@ export async function likePost(postId: string, likesArray: string[]) {
   }
 }
 
-// ============================== Remove SAVED POST 
+// ============================== Remove SAVED POST
 export async function deleteSavedPost(savedRecordId: string) {
   try {
     const statusCode = await databases.deleteDocument(
@@ -385,7 +388,7 @@ export async function getPostById(postId?: string) {
   }
 }
 
-// re fetch posts when reach end of posts post limit set on 9  
+// re fetch posts when reach end of posts post limit set on 9
 export async function getInfinitePosts({ pageParam }: { pageParam: number }) {
   const queries: any[] = [Query.orderDesc("$updatedAt"), Query.limit(9)];
 
@@ -438,5 +441,236 @@ export async function getUserById(userId: string) {
     return user;
   } catch (error) {
     console.log(error);
+  }
+}
+
+export async function getSuggestedUsers() {
+  const queries: any[] = [Query.orderDesc("$createdAt"), Query.limit(9)];
+  try {
+    const suggestedUsers = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.userCollectionId,
+      queries
+    );
+    if (!suggestedUsers) throw Error;
+
+    return suggestedUsers;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function userFollowRequest(
+  requesterId: string,
+  receiverId: string
+) {
+  try {
+    const saveRequestToDB = databases.createDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.followingCollectionId,
+      ID.unique(),
+      {
+        following: requesterId,
+        followers: receiverId,
+      }
+    );
+
+    if (!saveRequestToDB) throw Error;
+
+    console.log(saveRequestToDB);
+
+    return saveRequestToDB;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getFollwingAndFollowers() {
+  try {
+    const allRequest = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.followingCollectionId
+    );
+
+    if (!allRequest) throw Error;
+
+    return allRequest;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function userUnfollowRequest(requestId: string) {
+  try {
+    const statusCode = await databases.deleteDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.followingCollectionId,
+      requestId
+    );
+
+    if (!statusCode) throw Error;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export function getProfileImagePreview(fileId: string) {
+  try {
+    const fileUrl = storage.getFilePreview(
+      appwriteConfig.storageId,
+      fileId,
+      400,
+      400,
+      ImageGravity.Top,
+      50
+    );
+    console.log(fileUrl);
+    if (!fileUrl) throw Error;
+
+    return fileUrl;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function updateProfile({
+  user,
+  avatarFile,
+  bio,
+  newName,
+  newUsername,
+}: {
+  user: Models.Document;
+  avatarFile?: File[];
+  bio: string;
+  newName?: string;
+  newUsername?: string;
+}) {
+  try {
+    let uploadedFile;
+    if (avatarFile) {
+      const avatarUrl = avatars.getInitials(user.name);
+      uploadedFile = await uploadFile(avatarFile[0]);
+      if (!uploadedFile) throw Error;
+
+      const fileUrl = getProfileImagePreview(uploadedFile.$id);
+      if (!fileUrl) {
+        await deleteFile(uploadedFile.$id);
+        throw Error;
+      }
+
+      if (user.imageId) {
+        const deletePrevImage = await deleteFile(user.imageId);
+
+        if (!deletePrevImage) {
+          await deleteFile(uploadedFile.$id);
+          throw Error;
+        }
+        await databases.updateDocument(
+          appwriteConfig.databaseId,
+          appwriteConfig.userCollectionId,
+          user.$id,
+          {
+            imageId: "",
+            imageUrl: avatarUrl,
+          }
+        );
+      }
+
+      const statusCode = await databases.updateDocument(
+        appwriteConfig.databaseId,
+        appwriteConfig.userCollectionId,
+        user.$id,
+        {
+          imageId: uploadedFile.$id,
+          imageUrl: fileUrl,
+          bio: bio,
+          name: newName,
+          username: newUsername,
+        }
+      );
+
+      if (!statusCode) {
+        // Delete new file that has been recently uploaded
+
+        await deleteFile(uploadedFile.$id);
+      }
+
+      return statusCode;
+    } else {
+      let statusCode;
+
+      if (!user.imageId) {
+        const avatarUrl = avatars.getInitials(user.name);
+        statusCode = await databases.updateDocument(
+          appwriteConfig.databaseId,
+          appwriteConfig.userCollectionId,
+          user.$id,
+          {
+            bio: bio,
+            name: newName,
+            username: newUsername,
+            imageUrl: avatarUrl,
+          }
+        );
+      } else {
+        statusCode = await databases.updateDocument(
+          appwriteConfig.databaseId,
+          appwriteConfig.userCollectionId,
+          user.$id,
+          {
+            bio: bio,
+            name: newName,
+            username: newUsername,
+          }
+        );
+      }
+      return statusCode;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function deleteProfileImage({ user }: { user: Models.Document }) {
+  try {
+    const deleteImage = await deleteFile(user.imageId);
+
+    if (!deleteImage) throw Error;
+
+    const avatarUrl = avatars.getInitials(user.name);
+
+    const statusCode = await databases.updateDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.userCollectionId,
+      user.$id,
+      {
+        imageId: "",
+        imageUrl: avatarUrl,
+      }
+    );
+
+    if (!statusCode) throw Error;
+
+    return statusCode;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function searchPeople(searchTerm: string) {
+  try {
+    const users = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.userCollectionId,
+      [Query.search("name", searchTerm)]
+    );
+
+    if (!users) throw Error;
+
+    return users;
+  } catch (error) {
+    console.log(error);
+    return null;
   }
 }

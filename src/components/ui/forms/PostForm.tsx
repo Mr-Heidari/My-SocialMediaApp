@@ -116,6 +116,7 @@ const PostForm = ({ post, action }: PostFormProps) => {
                 <FileUploader
                   fieldChange={field.onChange}
                   mediaUrl={post?.imageUrl}
+                  usage="postForm"
                 />
               </FormControl>
               <FormMessage className="shad-form_message" />
@@ -162,14 +163,16 @@ const PostForm = ({ post, action }: PostFormProps) => {
           <Button
             type="button"
             className="shad-button_dark_4"
-            onClick={() => navigate(-1)}>
-            Cancel
+            onClick={() => navigate(-1)}
+            disabled={isLoadingCreate || isLoadingUpdate}>
+             
+             cancel
           </Button>
           <Button
             type="submit"
             className="shad-button_primary whitespace-nowrap"
             disabled={isLoadingCreate || isLoadingUpdate}>
-            {(isLoadingCreate || isLoadingUpdate) && <Loader width={18} height={18} />}
+            {(isLoadingCreate || isLoadingUpdate) && <Loader width={18} height={18} color="invert"/>}
             {action} Post
           </Button>
         </div>

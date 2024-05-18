@@ -10,6 +10,7 @@ export const INITIAL_USER = {
   email: "",
   imageUrl: "",
   bio: "",
+  isSkippedPersonalizationForm:false
 };
 
 //check every moment is user logged in or not
@@ -30,12 +31,13 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
-
   //check if our user is on our database
+
   const checkAuthUser = async () => {
+    setIsLoading(true);
     try {
       const currentAccount = await getCurrentUser();
-
+    
       if (currentAccount) {
         setUser({
           id: currentAccount.$id,
@@ -44,6 +46,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           email: currentAccount.email,
           imageUrl: currentAccount.imageUrl,
           bio: currentAccount.bio,
+          isSkippedPersonalizationForm:currentAccount.isSkippedPersonalizationForm,
         });
 
         setIsAuthenticated(true);
@@ -60,7 +63,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  //this work when our app reload
+  //this work when our app reload 
   useEffect(() => {
     if (
       localStorage.getItem("cookieFallback")==='[]'||

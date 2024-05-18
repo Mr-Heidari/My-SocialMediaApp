@@ -49,6 +49,7 @@ export type IUser = {
   email: string;
   imageUrl: string;
   bio: string;
+  isSkippedPersonalizationForm:boolean
 };
 
 export type INewUser = {

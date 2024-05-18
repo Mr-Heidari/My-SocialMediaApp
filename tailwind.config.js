@@ -32,6 +32,10 @@ export default {
         'light-3': '#7878A3',
         'light-4': '#5C5C7B',
       },
+      backgroundImage: {
+        'homebackground': "url('/public/assets/images/gray-metal.png')",
+        
+      },
       screens: {
         'xs': '480px',
       

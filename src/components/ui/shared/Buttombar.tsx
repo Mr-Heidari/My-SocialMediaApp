@@ -4,7 +4,6 @@ import { useLocation, Link } from "react-router-dom";
 
 //show on mobile devices
 const Buttombar = () => {
-
   //get route pathname
   const { pathname } = useLocation();
   return (
@@ -15,24 +14,24 @@ const Buttombar = () => {
           <li key={link.label}>
             <Link
               to={link.route}
-              
-              className={` flex-center flex-col gap-1 p-2 transition ${
-                isActive && "bg-primary-500 rounded-md "
+              className={` flex-center flex-col gap-1 p-2 transition rounded-md ${
+                isActive && "bg-white/70  "
               }`}
             >
               <img
                 src={link.imgURL}
                 alt={link.label}
-                className={`${
-                  isActive && "invert-white"
+                className={` brightness-200 ${
+                  isActive && "invert-white brightness-0"
                 }`}
                 width={18}
                 height={18}
               />
-              <p className="tiny-medium text-light-2"> {link.label}</p>
-             
+              <p className={`tiny-medium ${isActive && " text-black"}`}>
+                {" "}
+                {link.label}
+              </p>
             </Link>
-
           </li>
         );
       })}

@@ -10,21 +10,29 @@ import {
   createPost,
   createUserAccount,
   deletePost,
+  deleteProfileImage,
   deleteSavedPost,
   getCurrentUser,
+  getFollwingAndFollowers,
   getInfinitePosts,
   getPostById,
   getRecentPosts,
+  getSuggestedUsers,
   getUserById,
   getUserPosts,
   likePost,
   savePost,
+  searchPeople,
   searchPosts,
   signInAccount,
   signOutAccount,
   updatePost,
+  updateProfile,
+  userFollowRequest,
+  userUnfollowRequest,
 } from "../appwrite/api";
 import { QUERY_KEYS } from "./queryKeys";
+import { Models } from "appwrite";
 
 export const useCreateUserAccountMutation = () => {
   return useMutation({
@@ -50,8 +58,10 @@ export const useCreatePost = () => {
   return useMutation({
     mutationFn: (post: INewPost) => createPost(post),
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GET_RECENT_POSTS],
+      new Promise(() => {
+        queryClient.invalidateQueries({
+          queryKey: [QUERY_KEYS.GET_RECENT_POSTS],
+        });
       });
     },
   });
@@ -187,10 +197,10 @@ export const useDeletePost = () => {
 export const useGetPosts = () => {
   return useInfiniteQuery({
     queryKey: [QUERY_KEYS.GET_INFINITE_POSTS],
-    queryFn: getInfinitePosts ,
+    queryFn: getInfinitePosts,
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore: Unreachable code error
-    getNextPageParam: (lastPage ) => {
+    getNextPageParam: (lastPage) => {
       // If there's no data, there are no more pages.
       if (lastPage && lastPage.documents.length === 0) {
         return null;
@@ -207,6 +217,114 @@ export const useSearchPosts = (searchTerm: string) => {
   return useQuery({
     queryKey: [QUERY_KEYS.SEARCH_POSTS, searchTerm],
     queryFn: () => searchPosts(searchTerm),
+    enabled: !!searchTerm,
+  });
+};
+
+export const useGetSuggestedUsers = () => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_SuggestedUser],
+    queryFn: () => getSuggestedUsers(),
+  });
+};
+
+export const useUserFollowRequest = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      requesterId,
+      receiverId,
+    }: {
+      requesterId: string;
+      receiverId: string;
+    }) => userFollowRequest(requesterId, receiverId),
+    onSuccess: () =>
+      Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: [QUERY_KEYS.GET_SuggestedUser],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: [QUERY_KEYS.GET_CURRENT_USER],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: [QUERY_KEYS.GET_USER_BY_ID],
+        }),
+      ]),
+  });
+};
+
+export const useGetFollowinAndFollowers = () => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_FOLLOWING_FOLLOWERS],
+    queryFn: () => getFollwingAndFollowers(),
+  });
+};
+
+export const useUserUnfollowRequest = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ requestId }: { requestId: string }) =>
+      userUnfollowRequest(requestId),
+    onSuccess: async () =>
+      Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: [QUERY_KEYS.GET_SuggestedUser],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: [QUERY_KEYS.GET_CURRENT_USER],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: [QUERY_KEYS.GET_USER_BY_ID],
+        }),
+      ]),
+  });
+};
+
+export const useUpdateProflie = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      user,
+      avatarFile,
+      bio,
+      newName,
+      newUsername,
+    }: {
+      user: Models.Document;
+      avatarFile?: File[];
+      bio: string;
+      newName?: string;
+      newUsername?: string;
+    }) => updateProfile({ user, avatarFile, bio, newName, newUsername }),
+    onSuccess: () => {
+      Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: [QUERY_KEYS.GET_CURRENT_USER],
+        }),
+      ]);
+    },
+  });
+};
+
+export const useDeleteProfileImage = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ user }: { user: Models.Document }) =>
+      deleteProfileImage({ user }),
+    onSuccess:() => {
+      Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: [QUERY_KEYS.GET_CURRENT_USER],
+        }),
+      ]);
+    }
+  });
+};
+
+export const useSearchPeople = (searchTerm: string) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_SEARCH_USERS,searchTerm],
+    queryFn: () => searchPeople(searchTerm),
     enabled: !!searchTerm,
   });
 };

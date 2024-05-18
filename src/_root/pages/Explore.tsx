@@ -19,7 +19,8 @@ const SearchResults = ({ isSearchFetching, searchedPosts }: SearchResultProps) =
 
   //if our fetching data was on isfetching property on useQuery hook in react-query lib
   if (isSearchFetching) {
-    return <Loader width={30} height={30} />;
+
+    return (<Loader width={30} height={30} />);
 
     // if data fetchet and data array have lenght
   } else if (searchedPosts && searchedPosts.documents.length > 0) {
@@ -28,7 +29,7 @@ const SearchResults = ({ isSearchFetching, searchedPosts }: SearchResultProps) =
     //if search result wasnt match with any post captions
   } else {
     return (
-      <p className="text-light-4 mt-10 text-center w-full">No results found</p>
+      <p className="text-neutral-400 mt-10 text-center w-full">No results found</p>
     );
   }
 };
@@ -65,7 +66,7 @@ const Explore = () => {
   //data not yet recive
   if (!posts)
     return (
-      <div className="flex-center w-full h-full" >
+      <div className="flex-center w-full h-full max-md:pt-20" >
         <Loader width={30} height={30}/>
       </div>
     );
@@ -87,6 +88,7 @@ const Explore = () => {
             width={24}
             height={24}
             alt="search"
+            className="invert brightness-0"
           />
           <Input
             type="text"
@@ -111,6 +113,7 @@ const Explore = () => {
             width={20}
             height={20}
             alt="filter"
+            className=" invert"
           />
         </div>
       </div>

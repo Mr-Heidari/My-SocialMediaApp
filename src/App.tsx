@@ -18,16 +18,19 @@ import SingupForm from "./_auth/forms/SingupForm";
 import AuthLayout from "./_auth/AuthLayout";
 import RootLayout from "./_root/RootLayout";
 import { Toaster } from "@/components/ui/toaster";
+import PersonalizationForm from "./_auth/forms/PersonalizationForm";
 
 export const App = () => {
   return (
     <main className=" flex h-screen">
       <Routes>
+        <Route path="/pesonalizeProfile" element={<PersonalizationForm />} />
         <Route element={<AuthLayout />}>
           {/**public routes : every body can see */}
           <Route path="/sign-in" element={<SigninForm />} />
           <Route path="/sign-up" element={<SingupForm />} />
         </Route>
+        {/** only new User can see this page */}
 
         {/**private routes : only ppl are sing in can see */}
         <Route element={<RootLayout />}>

@@ -22,3 +22,16 @@ export const PostValidation = z.object({
   location: z.string().min(2).max(100),
   tags: z.string(),
 });
+
+export const PresonalizeProfileValidation=z.object({
+  bio: z.string().min(5).max(100),
+  file: z.custom<File[]>(),
+});
+
+export const EditProfileValidation = z.object({
+  bio: z.string().min(5).max(100),
+  file: z.custom<File[]>(),
+  name: z.string().min(2, { message: "Too Short" }),
+  username: z.string().min(2, { message: "Too Short" }),
+  email: z.string().email(),
+});
