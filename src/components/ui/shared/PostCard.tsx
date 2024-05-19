@@ -62,7 +62,7 @@ const PostCard = ({post}: PostCardProps) => {
   
         <Link to={`/posts/${post.$id}`} className="relative overflow-hidden">
           <div className="text-sm lg:base-medium pb-5 px-5">
-            <p>{post.caption}</p>
+            <p className="line-clamp-1">{post.caption}</p>
             <ul className="flex gap-1 mt-2">
               {post.tags.map((tag: string, index: string) => (
                 <li key={`${tag}${index}`} className="text-white/70 text-xs bg-zinc-600 p-1 rounded-md">
@@ -72,15 +72,11 @@ const PostCard = ({post}: PostCardProps) => {
             </ul>
           </div>
           <div className="overflow-hidden relative xs:h-[400px] lg:h-[450px]">
+      
           <img
             src={post.imageUrl || "/assets/icons/profile-placeholder.svg"}
             alt="post image"
-            className=" absolute -z-10 object-cover blur-md "
-          />
-          <img
-            src={post.imageUrl || "/assets/icons/profile-placeholder.svg"}
-            alt="post image"
-            className="post-card_img z-10 "
+            className="post-card_img "
           />
           </div>
         </Link>

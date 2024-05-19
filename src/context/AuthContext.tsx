@@ -54,7 +54,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         return true;
       }
 
-      console.log(isAuthenticated)
+      localStorage.removeItem('cookieFallback')
       return false;
     } catch (error) {
       console.log(error);

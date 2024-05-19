@@ -241,7 +241,7 @@
   }
 
   .post-card_img {
-    @apply h-full max-md:max-h-[400px]  w-full object-contain object-center mb-5;
+    @apply h-full max-md:max-h-[400px] min-h-[400px] w-full object-contain object-center mb-5;
   }
 
   /* Topbar */
