@@ -450,7 +450,7 @@ export async function getUserById(userId: string) {
 }
 
 export async function getSuggestedUsers() {
-  const queries: any[] = [Query.orderDesc("$createdAt"), Query.limit(9)];
+  const queries: any[] = [Query.orderDesc("$createdAt"), Query.limit(8)];
   try {
     const suggestedUsers = await databases.listDocuments(
       appwriteConfig.databaseId,
